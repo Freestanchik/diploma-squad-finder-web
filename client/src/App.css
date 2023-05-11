@@ -1,0 +1,11 @@
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.App main {
+  flex-grow: 1;
+  align-self: center;
+}
+
+/*# sourceMappingURL=App.css.map */
