@@ -1,5 +1,4 @@
 import express from 'express'
-import bodyParser from 'body-parser'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
@@ -10,8 +9,9 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors())
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use(express.json());
 
 const PORT = process.env.PORT || 8000;
 app.get('/', (req, res) => {
@@ -25,5 +25,5 @@ app.listen(PORT, () => console.log(`[server]: Server is running at http://localh
 mongoose.Promise = Promise;
 let DB_URL = process.env.DB_URL || ""
 
-mongoose.connect(DB_URL).then(r => mongoose.Promise);
+mongoose.connect(DB_URL).then(r => console.log(r));
 

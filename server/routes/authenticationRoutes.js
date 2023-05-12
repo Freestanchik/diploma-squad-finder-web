@@ -1,17 +1,7 @@
 import express from 'express'
 const authRouter = express.Router();
+import {loginUser, registerUser} from "../controllers/authController.js";
 
-authRouter.post('/register', (req, res) => {
-    console.log("sdsadsda")
-});
-authRouter.post('/login', (req, res) => {
-    console.log("sdsadsda");
-})
-
-authRouter.get('/login', (req, res) => {
-    // Implement logic to render login form
-    res.send('Login form');
-});
-
-
+authRouter.post('/register', registerUser);
+authRouter.post('/login', loginUser);
 export default authRouter
