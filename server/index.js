@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import authRouter from './routes/authenticationRoutes.js'
+import userRouter from "./routes/userRoutes.js";
 
 // Load environment variables from a .env file
 dotenv.config();
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authRouter)
+app.use('/user', userRouter)
 app.listen(PORT, () => console.log(`[server]: Server is running at http://localhost:${PORT}`));
 
 
