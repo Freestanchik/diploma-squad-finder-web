@@ -28,6 +28,7 @@
 }
 .header__user-info .profile-icon {
   font-size: 40px;
+  transition: color 0.2s ease-in-out;
 }
 .header__user-info .user-info_left {
   display: flex;
@@ -39,13 +40,16 @@
   font-size: 30px;
   margin: 0;
 }
-.header__user-info .login-link a {
+.header__user-info .login-link a, .header__user-info .btn-logout {
   font-weight: bold;
   font-size: 20px;
   transition: color 0.2s ease-in-out;
 }
-.header__user-info .login-link a:hover {
+.header__user-info .login-link a:hover, .header__user-info .profile-icon a:hover, .header__user-info .btn-logout {
   color: aqua;
+}
+.header__user-info .btn-logout {
+  background-color: transparent;
 }
 
 /*# sourceMappingURL=header.css.map */
