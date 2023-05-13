@@ -33,6 +33,7 @@
   &__user-info {
     .profile-icon {
       font-size: 40px;
+      transition: color 0.2s ease-in-out;
     }
 
     .user-info_left {
@@ -47,14 +48,17 @@
       margin: 0;
     }
 
-    .login-link a {
+    .login-link a , .btn-logout{
       font-weight: bold;
       font-size: 20px;
       transition: color 0.2s ease-in-out;
     }
 
-    .login-link a:hover {
+    .login-link a:hover, .profile-icon a:hover , .btn-logout{
       color: aqua;
+    }
+    .btn-logout{
+      background-color: transparent;
     }
   }
 
