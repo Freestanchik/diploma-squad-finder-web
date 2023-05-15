@@ -1,0 +1,29 @@
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  max-width: 800px;
+  margin-top: 10px;
+
+  &__username {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  &__email {
+    margin-bottom: 0.5rem;
+  }
+
+  &__age,
+  &__gender {
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+
+  &__about {
+    margin-top: 1rem;
+  }
+}

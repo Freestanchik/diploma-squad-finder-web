@@ -5,15 +5,24 @@ import {faUser} from '@fortawesome/free-regular-svg-icons';
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {logout, reset} from "../../store/slices/authSlice.js";
+import {resetUser} from "../../store/slices/userSlice.js";
+import {useEffect} from "react";
+import {getUser} from "../../store/slices/userSlice.js";
 
 const Header = () => {
-    const {user} = useSelector((state) => state.auth)
+    const {token} = useSelector((state) => state.auth)
+    const {user} = useSelector((state) => state.user)
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getUser())
+    }, [token])
 
     const onLogout = () => {
         dispatch(logout())
         dispatch(reset())
+        dispatch(resetUser())
         navigate('/')
     }
 
@@ -28,7 +37,7 @@ const Header = () => {
                     <div className={'user-info_left'}>
                         <p className={'user-name'}>{user ? user.login : "Гість"}</p>
                         <span className={'login-link'}>
-                            {user
+                            {token
                                 ? <button className="btn-logout" onClick={onLogout}>Вийти</button>
                                 : <Link to="/login">Увійти</Link>
                             }

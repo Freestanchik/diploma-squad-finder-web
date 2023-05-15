@@ -10,7 +10,7 @@ import Loading from "../../components/loading/Loading.jsx";
 const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const {user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
+    const {token, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
 
     useEffect(() => {
 
@@ -26,13 +26,13 @@ const Login = () => {
             toast("Вас успішно авторизовано!")
         }
 
-        if (isSuccess || user) {
+        if (isSuccess || token) {
             navigate('/')
         }
 
         dispatch(reset())
 
-    }, [user, isSuccess, isError, message, navigate, dispatch])
+    }, [token, isSuccess, isError, message, navigate, dispatch])
 
     const initialValues = {
         email: '',
