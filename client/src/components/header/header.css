@@ -44,6 +44,7 @@
   font-weight: bold;
   font-size: 20px;
   transition: color 0.2s ease-in-out;
+  color: white;
 }
 .header__user-info .login-link a:hover, .header__user-info .profile-icon a:hover, .header__user-info .btn-logout {
   color: aqua;
