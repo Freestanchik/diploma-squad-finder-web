@@ -31,9 +31,6 @@ export const registerUser = asyncHandler(async (req, res) => {
 
     if (newUser) {
         res.status(201).json({
-            _id: newUser.id,
-            login: newUser.login,
-            email: newUser.email,
             token: generateJWT(newUser._id)
         })
     } else {
@@ -54,9 +51,6 @@ export const loginUser = asyncHandler(async (req, res) => {
 
     if (user && (await bcrypt.compare(password, user.password))) {
         res.json({
-            _id: user.id,
-            login: user.login,
-            email: user.email,
             token: generateJWT(user._id)
         })
     } else {
