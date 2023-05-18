@@ -1,6 +1,6 @@
 import "./gameSessionItem.scss"
 import {useDispatch, useSelector} from "react-redux";
-import {faWindowClose} from '@fortawesome/free-regular-svg-icons';
+import {faArrowAltCircleRight, faWindowClose} from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {deleteGameSession} from "../../store/slices/gameSessionSlice.js";
 
@@ -29,11 +29,17 @@ const GameSessionItem = ({gameSession}) => {
                     <h2 className="game-name">Гра: {gameName}</h2>
                     <p className="owner">Автор: {owner && owner.login}</p>
                 </div>
-                {user && user._id === owner._id && (
-                    <div className="game-session__action-icons">
-                        <FontAwesomeIcon icon={faWindowClose} className="btn-delete" onClick={() => dispatch(deleteGameSession(gameSession._id))}/>
-                    </div>)
-                }
+                <div className="game-session__action-icons">
+                    {user && user._id === owner._id && (
+                        <FontAwesomeIcon icon={faWindowClose} className="btn-delete"
+                                         onClick={() => dispatch(deleteGameSession(gameSession._id))}/>)
+                    }
+                    {user && user._id !== owner._id && (
+                        <FontAwesomeIcon icon={faArrowAltCircleRight} className="btn-join"
+                                         onClick={() => dispatch(deleteGameSession(gameSession._id))}/>)
+                    }
+                </div>
+
             </div>
 
             <div className="game-session__info">

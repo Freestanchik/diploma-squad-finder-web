@@ -3,7 +3,9 @@
   justify-content: center;
 
   li {
+    width: 150px;
     margin: 5px 20px;
+    text-align: center;
     @media (max-width: 768px) {
       margin: 5px 5px;
       text-align: center;
