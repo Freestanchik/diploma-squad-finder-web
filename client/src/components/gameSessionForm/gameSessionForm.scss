@@ -1,0 +1,75 @@
+.new-game-session-form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  margin: 0 auto;
+  padding: 10px;
+
+  label {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .error {
+    color: red;
+    font-size: 0.875rem;
+  }
+
+  button[type='submit'] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button[type='submit']:hover {
+    background-color: #0056b3;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .game-platforms-container {
+    margin-bottom: 10px;
+  }
+
+  .game-platforms-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .game-platforms-checkboxes {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+
+  }
+
+  .checkbox-label {
+    display: flex;
+    flex-direction: column;
+  }
+
+
+  @media (max-width: 500px) {
+    max-width: 100%;
+
+    input,
+    select,
+    textarea {
+    }
+
+  }
+}
