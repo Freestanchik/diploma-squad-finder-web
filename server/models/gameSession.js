@@ -13,6 +13,9 @@ const gameSessionSchema = mongoose.Schema({
     gamePlatforms: {
         type: [String],
     },
+    skillLvl: {
+        type: Number,
+    },
     requiredPlayers: {
         type: Number,
     },
