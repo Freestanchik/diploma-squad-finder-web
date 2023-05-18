@@ -11,6 +11,7 @@ import Login from "./pages/login/Login.jsx";
 import Navigation from "./components/navigation/Navigation.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import PageSelector from "./components/pageSelector/PageSelector.jsx";
+import UserGameSessions from "./pages/UserGameSessions/UserGameSessions.jsx";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
             <main>
                 <Routes>
                     <Route path={"/"} element={<GameSessions/>}></Route>
+                    <Route path={"/userSessions"} element={<UserGameSessions/>}></Route>
                     <Route path={"/profile"} element={<Profile/>}></Route>
                     <Route path={"/register"} element={<Registration/>}></Route>
                     <Route path={"/login"} element={<Login/>}> </Route>

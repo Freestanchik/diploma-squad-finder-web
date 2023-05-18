@@ -5,7 +5,8 @@
 }
 .App main {
   flex-grow: 1;
-  align-self: center;
+  display: flex;
+  justify-content: center;
 }
 
 /*# sourceMappingURL=App.css.map */

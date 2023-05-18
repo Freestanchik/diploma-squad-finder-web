@@ -12,10 +12,10 @@ const gameSessionRouter = express.Router();
 gameSessionRouter.get('/gameSessions', getAllSessions);
 gameSessionRouter.post('/RequestSession', isAuthorized, makeJoinRequest);
 gameSessionRouter.post('/deleteRequestSession', isAuthorized, deleteJoinRequest);
-gameSessionRouter.delete('/deleteGameSession/:id', isAuthorized, deleteGameSession);
 
+gameSessionRouter.route('/UserGameSessions').get(isAuthorized, getUserSessions).post(isAuthorized, addGameSession)
+gameSessionRouter.route('/UserGameSessions/:id').delete(isAuthorized, deleteGameSession)
 
-gameSessionRouter.route('/myGameSessions').get(isAuthorized, getUserSessions).post(isAuthorized, addGameSession)
 gameSessionRouter.route('/requestSession').post(isAuthorized, makeJoinRequest).delete(isAuthorized, deleteJoinRequest)
 
 export default gameSessionRouter

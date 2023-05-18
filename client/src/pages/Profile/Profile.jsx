@@ -32,9 +32,11 @@ const Profile = () => {
 
     return (
         <div className="user-profile">
-            <div className="user-profile__username">{user ? user.login : "user"}</div>
-            <div className="user-profile__email">{user ?user.email : "email"}</div>
-            <div className="user-profile__age">Age: 21</div>
+            <div className="user-profile__container">
+                <div className="user-profile__username">{user ? user.login : "user"}</div>
+                <div className="user-profile__email">{user ?user.email : "email"}</div>
+                <div className="user-profile__age">Age: 21</div>
+            </div>
         </div>
     );
 }

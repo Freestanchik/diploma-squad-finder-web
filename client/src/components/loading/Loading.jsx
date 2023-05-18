@@ -1,6 +1,9 @@
+import "./loading.scss"
 const Loading = () => {
-    return(
-        <div>loading</div>
+    return (
+        <div className="spinner-container">
+            <div className="loading-spinner"></div>
+        </div>
     );
 }
 
