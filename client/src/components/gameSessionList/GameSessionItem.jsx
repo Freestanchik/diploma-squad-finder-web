@@ -4,7 +4,6 @@ import {
     faArrowAltCircleDown,
     faArrowAltCircleRight, faRectangleXmark,
     faWindowClose,
-    faXmarkCircle
 } from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {deleteGameSession, deleteParticipant, joinGameSession} from "../../store/slices/gameSessionSlice.js";

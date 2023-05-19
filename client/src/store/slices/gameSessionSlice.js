@@ -119,7 +119,7 @@ export const gameSessionSlice = createSlice({
     name: 'gameSession',
     initialState,
     reducers: {
-        resetGameSessions: (state) => initialState,
+        resetGameSessions: () => initialState,
     },
     extraReducers: (builder) => {
         builder

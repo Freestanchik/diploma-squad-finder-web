@@ -5,7 +5,7 @@ import "./gameSessions.scss"
 import Modal from "../../components/modal/Modal.jsx";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {getAllGameSessions, resetGameSessions} from "../../store/slices/gameSessionSlice.js";
+import {getAllGameSessions} from "../../store/slices/gameSessionSlice.js";
 import Loading from "../../components/loading/Loading.jsx";
 import {faSquarePlus, faWindowClose} from "@fortawesome/free-regular-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
