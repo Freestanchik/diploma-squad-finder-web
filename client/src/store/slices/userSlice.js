@@ -3,6 +3,7 @@ import userService from "../../services/userService.js";
 
 const initialState = {
     user: null,
+    publicUser: null,
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -28,6 +29,23 @@ export const getUser = createAsyncThunk(
     }
 )
 
+export const getUserPublicData = createAsyncThunk(
+    'user/getUserPublicData',
+    async (id, thunkAPI) => {
+        try {
+            return await userService.getUserPublicData(id)
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
 export const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -36,22 +54,26 @@ export const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-
-            .addCase(getUser.pending, (state) => {
+            .addCase(getUser.pending || getUserPublicData.pending, (state) => {
                 state.isLoading = true
+            })
+            .addCase(getUser.rejected || getUserPublicData.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
             })
             .addCase(getUser.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
                 state.user = action.payload
             })
-            .addCase(getUser.rejected, (state, action) => {
+            .addCase(getUserPublicData.fulfilled, (state, action) => {
                 state.isLoading = false
-                state.isError = true
-                state.message = action.payload
+                state.isSuccess = true
+                state.publicUser = action.payload
             })
     },
 })
 
-export const { resetUser } = userSlice.actions
+export const {resetUser} = userSlice.actions
 export default userSlice.reducer
