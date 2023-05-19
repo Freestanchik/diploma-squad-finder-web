@@ -20,16 +20,47 @@
     align-items: center;
   }
 
-
-  .btn-delete {
-    cursor: pointer;
+  .btn-delete{
     color: red;
+  }
+
+  .btn-join{
+    color: #007bff;
+  }
+
+  .btn-delete, .btn-join{
+    cursor: pointer;
     transition: color 0.3s ease;
-    font-size: 35px;
+    font-size: 30px;
 
     &:hover {
       color: mediumorchid;
     }
+  }
+  .user-participants{
+    display: flex;
+    align-items: center;
+  }
+
+  .participant{
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+  }
+
+  .participant-name{
+    color: #007bff;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+
+  .btn-delete-participant{
+    margin: 1px;
+    cursor: pointer;
+    align-self: start;
+    color: red;
   }
 
 }

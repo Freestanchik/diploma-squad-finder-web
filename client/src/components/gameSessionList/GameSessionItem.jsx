@@ -1,13 +1,37 @@
 import "./gameSessionItem.scss"
 import {useDispatch, useSelector} from "react-redux";
-import {faWindowClose} from '@fortawesome/free-regular-svg-icons';
+import {
+    faArrowAltCircleDown,
+    faArrowAltCircleRight, faRectangleXmark,
+    faWindowClose,
+    faXmarkCircle
+} from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {deleteGameSession} from "../../store/slices/gameSessionSlice.js";
+import {deleteGameSession, deleteParticipant, joinGameSession} from "../../store/slices/gameSessionSlice.js";
+import {getUserPublicData} from "../../store/slices/userSlice.js";
+import React, {useState} from "react";
+import Modal from "../modal/Modal.jsx";
 
 const GameSessionItem = ({gameSession}) => {
     const dispatch = useDispatch()
 
-    const {user} = useSelector((state) => state.user)
+    const [userModalIsOpen, setUserModalIsOpen] = useState(false);
+
+    const {user, publicUser} = useSelector((state) => state.user)
+
+
+    function openUserModal() {
+        setUserModalIsOpen(true);
+    }
+
+    function hasUserWithId(participants, chosenId) {
+        for (let i = 0; i < participants.length; i++) {
+            if (participants[i]._id === chosenId) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     const {
         owner,
@@ -19,7 +43,7 @@ const GameSessionItem = ({gameSession}) => {
         timeStart,
         timeEnd,
         additionalInfo,
-        userParticipants = [],
+        participants = [],
     } = gameSession;
 
     return (
@@ -27,13 +51,45 @@ const GameSessionItem = ({gameSession}) => {
             <div className="game-session__main">
                 <div className="game-session__required-data">
                     <h2 className="game-name">Гра: {gameName}</h2>
-                    <p className="owner">Автор: {owner && owner.login}</p>
+                    <p className="owner">Автор:
+                        <button onClick={() => {
+                            openUserModal()
+                            dispatch(getUserPublicData(owner._id))
+                        }
+                        }>
+                            {owner && owner.login}
+                        </button>
+                    </p>
                 </div>
-                {user && user._id === owner._id && (
-                    <div className="game-session__action-icons">
-                        <FontAwesomeIcon icon={faWindowClose} className="btn-delete" onClick={() => dispatch(deleteGameSession(gameSession._id))}/>
-                    </div>)
-                }
+                <Modal active={userModalIsOpen} setActive={setUserModalIsOpen}>
+                    {publicUser && (
+                        <div className="modal-form">
+                            <p>{publicUser._id}</p>
+                            <p>{publicUser.login}</p>
+                            <p>{publicUser.email}</p>
+                        </div>
+                    )
+                    }
+                </Modal>
+                <div className="game-session__action-icons">
+                    {user && user._id === owner._id && (
+                        <FontAwesomeIcon icon={faWindowClose} className="btn-delete"
+                                         onClick={() => {
+                                             dispatch(deleteGameSession(gameSession._id))
+                                         }}/>)
+                    }
+                    {user && user._id !== owner._id && !hasUserWithId(participants, user._id) && (
+                        <FontAwesomeIcon icon={faArrowAltCircleRight} className="btn-join"
+                                         onClick={() => dispatch(joinGameSession(gameSession._id))}/>)
+                    }
+                    {user && user._id !== owner._id && hasUserWithId(participants, user._id) && (
+                        <FontAwesomeIcon icon={faArrowAltCircleDown} className="btn-delete"
+                                         onClick={() => dispatch(deleteParticipant(
+                                             {gameSessionId: gameSession._id, userId: user._id}
+                                         ))}/>)
+                    }
+                </div>
+
             </div>
 
             <div className="game-session__info">
@@ -43,32 +99,41 @@ const GameSessionItem = ({gameSession}) => {
                     </p>
                 )}
                 {skillLvl && (
-                    <p className="skill-lvl">skill lvl: {skillLvl}</p>
+                    <p className="skill-lvl">Рівень гри: {skillLvl}</p>
                 )}
                 {requiredPlayers && (
-                    <p className="required-players">Required Players: {requiredPlayers}</p>
+                    <p className="required-players">Необхідна кількість гравців: {requiredPlayers}</p>
                 )}
                 {sessionDate && (
                     <p className="session-date">
-                        Session Date: {sessionDate}
+                        Дата проведення: {sessionDate}
                     </p>
                 )}
                 {timeStart && timeEnd && (
                     <p className="session-time">
-                        Time: {timeStart} - {timeEnd}
+                        Час: {timeStart} - {timeEnd}
                     </p>
                 )}
                 {additionalInfo && (
-                    <p className="additional-info">Additional Info: {additionalInfo}</p>
+                    <p className="additional-info">Додаткова інформація: {additionalInfo}</p>
                 )}
-                {userParticipants.length > 0 && (
+                {participants.length > 0 && (
                     <div className="user-participants">
-                        <p>User Participants:</p>
-                        <ul>
-                            {userParticipants.map((userId) => (
-                                <li key={userId}>{userId}</li>
-                            ))}
-                        </ul>
+                        <p>Учасники: </p>
+                        {participants.map((userInfo) => (
+                            <div className="participant" key={userInfo._id}>
+                                <span className="participant-name"  onClick={() => {
+                                    openUserModal()
+                                    dispatch(getUserPublicData(userInfo._id))
+                                }}>
+                                    {userInfo.login}
+                                </span>
+                                {user && user._id === owner._id &&
+                                    (<FontAwesomeIcon icon={faRectangleXmark} className="btn-delete-participant"
+                                                                          onClick={() => dispatch(deleteParticipant({gameSessionId: gameSession._id, userId: userInfo._id}))}/>)
+                                }
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>

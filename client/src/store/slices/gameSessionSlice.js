@@ -79,6 +79,42 @@ export const deleteGameSession = createAsyncThunk(
         }
     }
 )
+
+export const joinGameSession = createAsyncThunk(
+    'gameSession/join',
+    async (id, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.token.token
+            return await gameSessionService.joinGameSession(id, token)
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
+export const deleteParticipant = createAsyncThunk(
+    'gameSession/deleteParticipant',
+    async ({gameSessionId, userId}, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.token.token
+            return await gameSessionService.deleteParticipant(gameSessionId, userId, token)
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
 export const gameSessionSlice = createSlice({
     name: 'gameSession',
     initialState,
@@ -126,9 +162,6 @@ export const gameSessionSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
-            .addCase(deleteGameSession.pending, (state) => {
-                state.isLoading = true
-            })
             .addCase(deleteGameSession.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
@@ -141,6 +174,30 @@ export const gameSessionSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
+            .addCase(joinGameSession.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                const elemIndex = state.gameSessions.findIndex(item => item._id === action.payload._id)
+                state.gameSessions[elemIndex] = action.payload
+            })
+            .addCase(joinGameSession.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+
+            .addCase(deleteParticipant.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                const elemIndex = state.gameSessions.findIndex(item => item._id === action.payload._id)
+                state.gameSessions[elemIndex] = action.payload
+            })
+            .addCase(deleteParticipant.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+
     },
 })
 
