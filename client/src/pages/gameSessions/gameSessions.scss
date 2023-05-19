@@ -15,8 +15,6 @@
       color: mediumorchid;
     }
   }
-
-
 }
 
 .btn-delete {
@@ -31,10 +29,11 @@
 }
 
 .btn-open-form {
+  margin: 5px;
   align-self: center;
   max-width: 300px;
   padding: 0.75rem;
-  font-size: 1rem;
+  font-size: 2rem;
   color: #fff;
   background-color: #7d4cdb;
   border: none;
@@ -47,7 +46,7 @@
   }
 }
 
-.game-session-page{
+.game-session-page {
   width: 100%;
   display: flex;
   flex-direction: column;
