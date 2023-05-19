@@ -37,18 +37,44 @@ const deleteGameSession = async (gameSessionId, token) => {
         },
     }
 
-    console.log(gameSessionId)
-
-    const response = await axios.delete(API_URL + 'UserGameSessions/'+gameSessionId, config)
+    const response = await axios.delete(API_URL + 'UserGameSessions/' + gameSessionId, config)
 
     return response.data
 }
+
+const joinGameSession = async (gameSessionId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    console.log(token, gameSessionId)
+    const response = await axios.put(API_URL + 'joinSession/' + gameSessionId, "", config)
+
+    return response.data
+}
+
+const deleteParticipant = async (gameSessionId, userId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    const response = await axios.put(API_URL + '/deleteParticipant/' + gameSessionId, {id: userId}, config)
+
+    return response.data
+}
+
 
 const gameSessionService = {
     getAllGameSessions,
     getUserGameSessions,
     createGameSession,
-    deleteGameSession
+    deleteGameSession,
+    joinGameSession,
+    deleteParticipant,
 }
 
 export default gameSessionService
