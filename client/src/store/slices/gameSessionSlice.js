@@ -3,6 +3,9 @@ import gameSessionService from "../../services/gameSessionService.js";
 
 const initialState = {
     gameSessions: [],
+    searchFilters: "",
+    currentPage: 1,
+    totalPages: 1,
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -11,9 +14,9 @@ const initialState = {
 
 export const getAllGameSessions = createAsyncThunk(
     'gameSessions/getAll',
-    async (_, thunkAPI) => {
+    async ({searchParams, currentPage}, thunkAPI) => {
         try {
-            return await gameSessionService.getAllGameSessions()
+            return await gameSessionService.getAllGameSessions(searchParams, currentPage)
         } catch (error) {
             const message =
                 (error.response &&
@@ -30,8 +33,7 @@ export const getUserGameSessions = createAsyncThunk(
     'gameSessions/getUserSessions',
     async (_, thunkAPI) => {
         try {
-            const token = thunkAPI.getState().auth.token.token
-            console.log(token)
+            const token = thunkAPI.getState().auth.token
             return await gameSessionService.getUserGameSessions(token)
         } catch (error) {
             const message =
@@ -48,7 +50,7 @@ export const createGameSession = createAsyncThunk(
     'gameSession/create',
     async (gameSessionData, thunkAPI) => {
         try {
-            const token = thunkAPI.getState().auth.token.token
+            const token = thunkAPI.getState().auth.token
             return await gameSessionService.createGameSession(gameSessionData, token)
         } catch (error) {
             const message =
@@ -66,7 +68,7 @@ export const deleteGameSession = createAsyncThunk(
     'gameSession/delete',
     async (id, thunkAPI) => {
         try {
-            const token = thunkAPI.getState().auth.token.token
+            const token = thunkAPI.getState().auth.token
             return await gameSessionService.deleteGameSession(id, token)
         } catch (error) {
             const message =
@@ -84,7 +86,7 @@ export const joinGameSession = createAsyncThunk(
     'gameSession/join',
     async (id, thunkAPI) => {
         try {
-            const token = thunkAPI.getState().auth.token.token
+            const token = thunkAPI.getState().auth.token
             return await gameSessionService.joinGameSession(id, token)
         } catch (error) {
             const message =
@@ -102,7 +104,7 @@ export const deleteParticipant = createAsyncThunk(
     'gameSession/deleteParticipant',
     async ({gameSessionId, userId}, thunkAPI) => {
         try {
-            const token = thunkAPI.getState().auth.token.token
+            const token = thunkAPI.getState().auth.token
             return await gameSessionService.deleteParticipant(gameSessionId, userId, token)
         } catch (error) {
             const message =
@@ -120,6 +122,12 @@ export const gameSessionSlice = createSlice({
     initialState,
     reducers: {
         resetGameSessions: () => initialState,
+        setSearchFilters: (state, action) => {
+            state.searchFilters = action.payload;
+        },
+        setPage: (state, action) => {
+            state.currentPage = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -129,7 +137,8 @@ export const gameSessionSlice = createSlice({
             .addCase(getAllGameSessions.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
-                state.gameSessions = action.payload
+                state.gameSessions = action.payload.gameSessions;
+                state.totalPages = action.payload.totalPages;
             })
             .addCase(getAllGameSessions.rejected, (state, action) => {
                 state.isLoading = false
@@ -201,5 +210,5 @@ export const gameSessionSlice = createSlice({
     },
 })
 
-export const {resetGameSessions} = gameSessionSlice.actions
+export const {resetGameSessions, setSearchFilters, setPage} = gameSessionSlice.actions
 export default gameSessionSlice.reducer
