@@ -1,19 +1,27 @@
 import asyncHandler from "express-async-handler";
-import userModel from "../models/userModel.js";
+import userService from "../services/userService.js";
 
 export const getCurrentUser = asyncHandler(async (req, res) => {
-    res.status(200).json(req.user)
-})
+    const currentUser = await userService.getCurrentUser(req.user);
+
+    res.status(200).json(currentUser);
+});
 
 export const getUserPublicData = asyncHandler(async (req, res) => {
-    const {id} = req.params
+    const { id } = req.params;
 
-    const user = await userModel.findById(id).select('login email').exec();
+    try {
+        const user = await userService.getUserPublicData(id);
 
-    if (!user) {
-        res.status(401)
-        throw new Error('User not found')
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(401).json({ error: error.message });
     }
+});
 
-    res.status(200).json(user)
-})
+const userController = {
+    getCurrentUser,
+    getUserPublicData
+};
+
+export default userController
