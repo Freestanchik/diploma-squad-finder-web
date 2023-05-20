@@ -1,8 +1,13 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:7000/gameSessions/'
-const getAllGameSessions = async () => {
-    const response = await axios.get(API_URL + 'gameSessions')
+const API_URL = 'http://localhost:7000/api/gameSessions/'
+
+const getAllGameSessions = async (searchParams, currentPage) => {
+    const data = {}
+    data.searchParams = searchParams
+    data.currentPage = currentPage
+
+    const response = await axios.post(API_URL + 'gameSessions', data)
     return response.data
 }
 
@@ -49,7 +54,6 @@ const joinGameSession = async (gameSessionId, token) => {
         },
     }
 
-    console.log(token, gameSessionId)
     const response = await axios.put(API_URL + 'joinSession/' + gameSessionId, "", config)
 
     return response.data
