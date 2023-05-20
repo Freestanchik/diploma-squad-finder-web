@@ -1,8 +1,9 @@
-import {ErrorMessage, Field, FieldArray, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import "./gameSessionForm.scss"
 import {useDispatch} from "react-redux";
 import {createGameSession} from "../../store/slices/gameSessionSlice.js";
 import {toast} from "react-toastify";
+import GamePlatformsField from "../gamePlatformsField/GamePlatformsField.jsx";
 
 const GameSessionForm = () => {
     const dispatch = useDispatch();
@@ -43,21 +44,8 @@ const GameSessionForm = () => {
                 </label>
                 <ErrorMessage name="gameName" component="div" className="error"/>
 
-                <FieldArray name="gamePlatforms">
-                    {() => (
-                        <div className="game-platforms-container">
-                            <label className="game-platforms-label">Game Platforms:</label>
-                            <div className="game-platforms-checkboxes">
-                                {['ps4', 'ps5', 'xbox', 'switch', 'pc', 'mobile'].map((platform) => (
-                                    <label key={platform} className="checkbox-label">
-                                        <Field type="checkbox" name="gamePlatforms" value={platform}/>
-                                        {platform}
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </FieldArray>
+                <GamePlatformsField/>
+
                 <ErrorMessage name="gamePlatforms" component="div" className="error"/>
                 <label>
                     Skill Level:

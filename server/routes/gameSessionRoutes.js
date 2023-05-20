@@ -1,21 +1,12 @@
 import express from "express";
-import {
-    addGameSession, deleteGameSession,
-    getAllSessions,
-    getUserSessions,
-    addParticipant, deleteParticipant
-} from "../controllers/gameSessionController.js";
+import gameSessionController from "../controllers/gameSessionController.js";
 import isAuthorized from "../middlewares/authMiddleware.js";
 
 const gameSessionRouter = express.Router();
 
-gameSessionRouter.get('/gameSessions', getAllSessions);
-gameSessionRouter.put('/joinSession/:id', isAuthorized, addParticipant);
-gameSessionRouter.put('/deleteParticipant/:id', isAuthorized, deleteParticipant);
-
-gameSessionRouter.route('/UserGameSessions').get(isAuthorized, getUserSessions).post(isAuthorized, addGameSession)
-gameSessionRouter.route('/UserGameSessions/:id').delete(isAuthorized, deleteGameSession)
-
-//gameSessionRouter.route('/requestSession').post(isAuthorized, addParticipant).delete(isAuthorized, deleteJoinRequest)
-
+gameSessionRouter.post('/gameSessions', gameSessionController.getAllSessions);
+gameSessionRouter.put('/joinSession/:id', isAuthorized, gameSessionController.addParticipant);
+gameSessionRouter.put('/deleteParticipant/:id', isAuthorized, gameSessionController.deleteParticipant);
+gameSessionRouter.route('/UserGameSessions').get(isAuthorized, gameSessionController.getUserParticipantSessions).post(isAuthorized, gameSessionController.addGameSession)
+gameSessionRouter.route('/UserGameSessions/:id').delete(isAuthorized, gameSessionController.deleteGameSession)
 export default gameSessionRouter

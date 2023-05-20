@@ -20,29 +20,53 @@
     align-items: center;
   }
 
-  .btn-delete{
+  .btn-delete {
     color: red;
   }
 
   .btn-join{
-    color: #007bff;
+    background-color: #2196f3;
   }
 
-  .btn-delete, .btn-join{
+  .btn-leave{
+    background-color: crimson;
+  }
+  .btn-join, .btn-leave {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #1976d2;
+    }
+    .icon-join, .icon-leave{
+      margin: 2px;
+    }
+  }
+
+  .btn-delete {
     cursor: pointer;
     transition: color 0.3s ease;
-    font-size: 30px;
+    font-size: 20px;
 
     &:hover {
       color: mediumorchid;
     }
   }
-  .user-participants{
+
+  .user-participants {
     display: flex;
     align-items: center;
   }
 
-  .participant{
+  .participant {
     margin: 5px;
     display: flex;
     align-items: center;
@@ -50,13 +74,13 @@
     border-radius: 4px;
   }
 
-  .participant-name{
+  .participant-name {
     color: #007bff;
     cursor: pointer;
     margin-right: 5px;
   }
 
-  .btn-delete-participant{
+  .btn-delete-participant {
     margin: 1px;
     cursor: pointer;
     align-self: start;
@@ -74,6 +98,17 @@
 
 .owner {
   margin: 0;
+  button{
+    background-color: transparent;
+    border: none;
+    color: red;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    &:hover {
+      color: mediumorchid;
+    }
+  }
 }
 
 .game-platforms {
@@ -107,4 +142,8 @@
 
 .user-participants li {
   margin-bottom: 5px;
+}
+
+.modal-form{
+  padding: 10px;
 }

@@ -1,18 +1,29 @@
-import gameSessionModel from "../models/gameSession.js"
-import asyncHandler from "express-async-handler";
+import asyncHandler from 'express-async-handler';
+import gameSessionService from "../services/gameSessionService.js";
 
 export const getAllSessions = asyncHandler(async (req, res) => {
-    const gameSessions = await gameSessionModel.find().sort({_id: -1}).populate('owner', 'login').populate('participants', 'login')
+    const {searchParams, currentPage} = req.body;
+    const {gameSessions, totalPages} = await gameSessionService.getAllSessions(searchParams, currentPage);
 
-    res.status(200).json(gameSessions)
-})
+    res.status(200).json({gameSessions, totalPages});
+});
 
 export const getUserSessions = asyncHandler(async (req, res) => {
-    const gameSessions = await gameSessionModel.find({owner: req.user.id}).sort({_id: -1}).populate('owner', 'login').populate('participants', 'login')
+    const {id} = req.user;
+    const gameSessions = await gameSessionService.getUserSessions(id);
 
-    res.status(200).json(gameSessions)
-})
+    res.status(200).json(gameSessions);
+});
+
+export const getUserParticipantSessions = asyncHandler(async (req, res) => {
+    const { id: userId } = req.user;
+    const gameSessions = await gameSessionService.getUserParticipantSessions(userId);
+
+    res.status(200).json(gameSessions);
+});
+
 export const addGameSession = asyncHandler(async (req, res) => {
+    const {id: ownerId} = req.user;
     const {
         gameName,
         gamePlatforms,
@@ -21,96 +32,68 @@ export const addGameSession = asyncHandler(async (req, res) => {
         sessionDate,
         timeStart,
         timeEnd,
-        additionalInfo
-    } = req.body
-    if (!req.body.gameName) {
-        res.status(400)
-        throw new Error('Please add gameName')
+        additionalInfo,
+    } = req.body;
+
+    if (!gameName) {
+        res.status(400);
+        throw new Error('Please add gameName');
     }
 
-    const gameSession = await gameSessionModel.create({
-        owner: req.user.id,
-        gameName: gameName,
-        gamePlatforms: gamePlatforms,
-        skillLvl: skillLvl,
-        requiredPlayers: requiredPlayers,
-        sessionDate: sessionDate,
-        timeStart: timeStart,
-        timeEnd: timeEnd,
-        additionalInfo: additionalInfo,
-    })
+    const gameSessionData = {
+        gameName,
+        gamePlatforms,
+        skillLvl,
+        requiredPlayers,
+        sessionDate,
+        timeStart,
+        timeEnd,
+        additionalInfo,
+    };
 
-    const loginGameSession = await gameSession.populate('owner', 'login')
+    const gameSession = await gameSessionService.addGameSession(ownerId, gameSessionData);
 
-    res.status(200).json(loginGameSession)
-})
+    res.status(200).json(gameSession);
+});
 
 export const deleteGameSession = asyncHandler(async (req, res) => {
-    const {id} = req.params
-    const gameSession = await gameSessionModel.findById(id)
+    const {id} = req.params;
+    const {id: ownerId} = req.user;
 
-    if (!gameSession) {
-        res.status(401)
-        throw new Error('Game session not found')
-    }
-    if (!req.user) {
-        res.status(402)
-        throw new Error('User not found')
-    }
-    if (gameSession.owner.toString() !== req.user.id) {
-        res.status(403)
-        throw new Error('Authorized user is not an owner')
-    }
+    const deletedGameSession = await gameSessionService.deleteGameSession(id, ownerId);
 
-    await gameSessionModel.findByIdAndDelete(id)
-
-    res.status(200).json({id: id})
-})
+    res.status(200).json(deletedGameSession);
+});
 
 export const addParticipant = asyncHandler(async (req, res) => {
     const {id} = req.params;
+    const {id: userId} = req.user;
 
-    const gameSession = await gameSessionModel.findById(id);
+    const updatedGameSession = await gameSessionService.addParticipant(id, userId);
 
-    if (!gameSession) {
-        res.status(401)
-        throw new Error('GameSession not found')
-    }
-
-    if (gameSession.owner.toString() === req.user.id) {
-        return res.status(403).json({error: 'You cannot join your own game session.'});
-    }
-
-    if (gameSession.participants.includes(req.user.id)) {
-        return res.status(409).json({error: 'User already joined to this game session.'});
-    }
-
-    gameSession.participants.push(req.user.id);
-
-    // Save the updated game session
-    await gameSession.save();
-    const updatedGameSession = await gameSessionModel.findById(id).populate('owner', 'login').populate('participants', 'login');
-
-    res.status(200).json(updatedGameSession)
-})
+    res.status(200).json(updatedGameSession);
+});
 
 export const deleteParticipant = asyncHandler(async (req, res) => {
     const {id} = req.params;
+    const {id: userId} = req.user;
 
-    const gameSession = await gameSessionModel.findById(id);
+    const updatedGameSession = await gameSessionService.deleteParticipant(id, userId);
 
-    if ((gameSession.owner.toString() === req.user.id || req.body.id === req.user.id) && gameSession.participants.includes(req.body.id)) {
-        gameSession.participants.splice(req.user.id, 1);
-    } else {
-        return res.status(409).json({error: 'no user'});
-    }
+    res.status(200).json(updatedGameSession);
+});
 
-    // Save the updated game session
-    //const updatedGameSession = await gameSession.save().populate('owner', 'login').populate('participants', 'login');
-    await gameSession.save();
-    const updatedGameSession = await gameSessionModel.findById(id).populate('owner', 'login').populate('participants', 'login');
-    res.status(200).json(updatedGameSession)
-})
+const gameSessionController = {
+    getAllSessions,
+    getUserSessions,
+    getUserParticipantSessions,
+    addGameSession,
+    deleteGameSession,
+    addParticipant,
+    deleteParticipant,
+};
+
+export default gameSessionController;
 
 
 

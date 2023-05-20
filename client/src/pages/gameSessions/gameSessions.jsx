@@ -6,9 +6,10 @@ import Modal from "../../components/modal/Modal.jsx";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {getAllGameSessions} from "../../store/slices/gameSessionSlice.js";
-import Loading from "../../components/loading/Loading.jsx";
 import {faSquarePlus, faWindowClose} from "@fortawesome/free-regular-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import SearchParamsForm from "../../components/searchParamsForm/SearchParamsForm.jsx";
+import PageSelector from "../../components/pageSelector/PageSelector.jsx";
 
 
 const GameSessions = () => {
@@ -18,15 +19,11 @@ const GameSessions = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const {gameSessions, isLoading, isSuccess, isError, message} = useSelector((state) => state.gameSession)
+    const {gameSessions, currentPage, totalPages, searchFilters, isSuccess, isError, message} = useSelector((state) => state.gameSession)
 
     useEffect(() => {
-        dispatch(getAllGameSessions())
-    }, [isError, isSuccess, message, dispatch])
-    if (isLoading) {
-        return <Loading/>
-    }
-
+        dispatch(getAllGameSessions({searchParams: searchFilters, currentPage: currentPage}))
+    }, [isError, isSuccess, currentPage, searchFilters, message, dispatch])
 
     function openFormModal() {
         if (!token) {
@@ -55,8 +52,13 @@ const GameSessions = () => {
                     <GameSessionForm/>
                 </div>
             </Modal>
+            <div className={"game-sessions__main"}>
+                <SearchParamsForm/>
+                <GameSessionList gameSessions={gameSessions}/>
+            </div>
 
-            <GameSessionList gameSessions={gameSessions}/>
+            {totalPages > 1 && (<PageSelector/>)}
+
         </div>
     );
 };

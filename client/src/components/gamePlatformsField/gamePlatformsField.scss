@@ -1,0 +1,21 @@
+.game-platforms-container {
+  margin-bottom: 10px;
+}
+
+.game-platforms-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.game-platforms-checkboxes {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+
+}
+
+.checkbox-label {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,67 +1,33 @@
-import bcrypt from 'bcryptjs'
 import asyncHandler from 'express-async-handler'
-import UserModel from "../models/userModel.js";
-import {generateJWT} from "../helpers/index.js";
+import authService from "../services/authService.js";
 
-export const registerUser = asyncHandler(async (req, res) => {
-    const {login, email, password} = req.body
+const registerUser = asyncHandler(async (req, res) => {
+    const {login, email, password} = req.body;
 
-    if (!login || !email || !password) {
-        res.status(400)
-        throw new Error('Add all required fields')
+    try {
+        const token = await authService.registerUser(login, email, password);
+        res.status(201).json(token);
+    } catch (error) {
+        res.status(400).json({error: error.message});
     }
+});
 
-    const user = await UserModel.findOne({email})
+const loginUser = asyncHandler(async (req, res) => {
+    const {email, password} = req.body;
 
-    if (user) {
-        res.status(400)
-        throw new Error('User already exists')
+    try {
+        const token = await authService.loginUser(email, password);
+        res.json(token);
+    } catch (error) {
+        res.status(400).json({error: error.message});
     }
+});
 
+const authController = {
+    registerUser,
+    loginUser,
+};
 
-    //Hash password
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
-
-    const newUser = await UserModel.create({
-        login,
-        email,
-        password: hashedPassword
-    })
-
-    if (newUser) {
-        res.status(201).json({
-            token: generateJWT(newUser._id)
-        })
-    } else {
-        res.status(400)
-        throw new Error('Invalid user data')
-    }
-
-})
-
-export const loginUser = asyncHandler(async (req, res) => {
-    const {email, password} = req.body
-    if (!email || !password) {
-        res.status(400)
-        throw new Error('Add all required fields')
-    }
-
-    const user = await UserModel.findOne({email})
-
-    if (user && (await bcrypt.compare(password, user.password))) {
-        res.json({
-            token: generateJWT(user._id)
-        })
-    } else {
-        res.status(400)
-        throw new Error('Invalid user data')
-    }
-})
-
-
-
-
-
+export default authController
 
 
