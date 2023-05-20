@@ -1,7 +1,7 @@
 import "./gameSessionItem.scss"
 import {useDispatch, useSelector} from "react-redux";
 import {
-    faArrowAltCircleDown,
+    faArrowAltCircleLeft,
     faArrowAltCircleRight, faRectangleXmark,
     faWindowClose,
 } from '@fortawesome/free-regular-svg-icons';
@@ -10,6 +10,7 @@ import {deleteGameSession, deleteParticipant, joinGameSession} from "../../store
 import {getUserPublicData} from "../../store/slices/userSlice.js";
 import React, {useState} from "react";
 import Modal from "../modal/Modal.jsx";
+
 
 const GameSessionItem = ({gameSession}) => {
     const dispatch = useDispatch()
@@ -63,9 +64,9 @@ const GameSessionItem = ({gameSession}) => {
                 <Modal active={userModalIsOpen} setActive={setUserModalIsOpen}>
                     {publicUser && (
                         <div className="modal-form">
-                            <p>{publicUser._id}</p>
-                            <p>{publicUser.login}</p>
-                            <p>{publicUser.email}</p>
+                            <p>Інформація про користувача</p>
+                            <p>Логін: {publicUser.login}</p>
+                            <p>Імейл: {publicUser.email}</p>
                         </div>
                     )
                     }
@@ -78,14 +79,19 @@ const GameSessionItem = ({gameSession}) => {
                                          }}/>)
                     }
                     {user && user._id !== owner._id && !hasUserWithId(participants, user._id) && (
-                        <FontAwesomeIcon icon={faArrowAltCircleRight} className="btn-join"
-                                         onClick={() => dispatch(joinGameSession(gameSession._id))}/>)
+                        <button className="btn-join" onClick={() => dispatch(joinGameSession(gameSession._id))}>
+                            <span> Приєднатися </span>
+                            <FontAwesomeIcon icon={faArrowAltCircleRight} className="icon-join"/>
+                        </button>
+                    )
                     }
                     {user && user._id !== owner._id && hasUserWithId(participants, user._id) && (
-                        <FontAwesomeIcon icon={faArrowAltCircleDown} className="btn-delete"
-                                         onClick={() => dispatch(deleteParticipant(
-                                             {gameSessionId: gameSession._id, userId: user._id}
-                                         ))}/>)
+                        <button className="btn-leave" onClick={() => dispatch(deleteParticipant(
+                            {gameSessionId: gameSession._id, userId: user._id}
+                        ))}>
+                            <FontAwesomeIcon icon={faArrowAltCircleLeft} className="icon-leave"/>
+                            <span> Покинути </span>
+                        </button>)
                     }
                 </div>
 
@@ -121,7 +127,7 @@ const GameSessionItem = ({gameSession}) => {
                         <p>Учасники: </p>
                         {participants.map((userInfo) => (
                             <div className="participant" key={userInfo._id}>
-                                <span className="participant-name"  onClick={() => {
+                                <span className="participant-name" onClick={() => {
                                     openUserModal()
                                     dispatch(getUserPublicData(userInfo._id))
                                 }}>
@@ -129,7 +135,10 @@ const GameSessionItem = ({gameSession}) => {
                                 </span>
                                 {user && user._id === owner._id &&
                                     (<FontAwesomeIcon icon={faRectangleXmark} className="btn-delete-participant"
-                                                                          onClick={() => dispatch(deleteParticipant({gameSessionId: gameSession._id, userId: userInfo._id}))}/>)
+                                                      onClick={() => dispatch(deleteParticipant({
+                                                          gameSessionId: gameSession._id,
+                                                          userId: userInfo._id
+                                                      }))}/>)
                                 }
                             </div>
                         ))}
