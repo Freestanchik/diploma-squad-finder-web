@@ -2,12 +2,12 @@ import gameSessionRepository from "../repositories/gameSessionRepository.js";
 
 const gameSessionService = {
     getAllSessions: async (searchParams, currentPage) => {
-        const { gameName, gamePlatforms, minSkillLevel, maxRequiredPlayers } = searchParams;
+        const {gameName, gamePlatforms, minSkillLevel, maxRequiredPlayers} = searchParams;
         const PAGE_SIZE = 10;
 
         const skip = (currentPage - 1) * PAGE_SIZE;
 
-        let gameSessions = [];
+        let gameSessions;
         const query = {};
 
         if (gameName) {
@@ -15,15 +15,15 @@ const gameSessionService = {
         }
 
         if (gamePlatforms && gamePlatforms.length > 0) {
-            query.gamePlatforms = { $in: gamePlatforms };
+            query.gamePlatforms = {$in: gamePlatforms};
         }
 
         if (minSkillLevel && minSkillLevel > 0) {
-            query.skillLvl = { $gte: minSkillLevel };
+            query.skillLvl = {$gte: minSkillLevel};
         }
 
         if (maxRequiredPlayers && maxRequiredPlayers > 0) {
-            query.requiredPlayers = { $lte: maxRequiredPlayers };
+            query.requiredPlayers = {$lte: maxRequiredPlayers};
         }
 
         const totalGameSessions = await gameSessionRepository.countDocuments(query);
@@ -31,7 +31,7 @@ const gameSessionService = {
 
         gameSessions = await gameSessionRepository.find(query, skip, PAGE_SIZE);
 
-        return { gameSessions, totalPages };
+        return {gameSessions, totalPages};
     },
 
     getUserSessions: async (userId) => {
@@ -45,9 +45,7 @@ const gameSessionService = {
     addGameSession: async (ownerId, gameSessionData) => {
         const gameSession = await gameSessionRepository.createGameSession(ownerId, gameSessionData);
 
-        const populatedGameSession = await gameSessionRepository.findByIdWithPopulate(gameSession._id);
-
-        return populatedGameSession;
+        return await gameSessionRepository.findByIdWithPopulate(gameSession._id);
     },
 
     deleteGameSession: async (gameSessionId, ownerId) => {
@@ -63,7 +61,7 @@ const gameSessionService = {
 
         await gameSessionRepository.deleteGameSession(gameSessionId);
 
-        return { id: gameSessionId };
+        return {id: gameSessionId};
     },
 
     addParticipant: async (gameSessionId, userId) => {
@@ -83,9 +81,7 @@ const gameSessionService = {
 
         await gameSessionRepository.addParticipant(gameSessionId, userId);
 
-        const updatedGameSession = await gameSessionRepository.findByIdWithPopulate(gameSessionId);
-
-        return updatedGameSession;
+        return await gameSessionRepository.findByIdWithPopulate(gameSessionId);
     },
 
     deleteParticipant: async (gameSessionId, userId) => {
@@ -97,9 +93,7 @@ const gameSessionService = {
             throw new Error('User not found');
         }
 
-        const updatedGameSession = await gameSessionRepository.findByIdWithPopulate(gameSessionId);
-
-        return updatedGameSession;
+        return await gameSessionRepository.findByIdWithPopulate(gameSessionId);
     },
 };
 
