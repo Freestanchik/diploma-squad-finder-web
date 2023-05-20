@@ -44,7 +44,7 @@ const Header = () => {
                         </span>
                     </div>
                     <span className={'profile-icon'}>
-                        <Link to="/login">
+                        <Link to="/profile">
                             <FontAwesomeIcon icon={faUser}/>
                         </Link>
                     </span>
