@@ -33,6 +33,9 @@
   font-size: 40px;
   transition: color 0.2s ease-in-out;
 }
+.header__user-info .profile-icon a {
+  color: white;
+}
 .header__user-info .user-info_left {
   display: flex;
   flex-direction: column;

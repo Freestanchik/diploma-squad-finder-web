@@ -47,7 +47,18 @@
 }
 
 .game-session-page {
-  width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.game-sessions__main{
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 300px max(500px) 300px;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }

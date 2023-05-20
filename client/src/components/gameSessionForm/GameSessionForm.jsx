@@ -1,4 +1,4 @@
-import {ErrorMessage, Field, FieldArray, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import "./gameSessionForm.scss"
 import {useDispatch} from "react-redux";
 import {createGameSession} from "../../store/slices/gameSessionSlice.js";

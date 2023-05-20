@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import { NavLink } from 'react-router-dom';
+import React from 'react';
 import "./pageSelector.scss"
 import {useDispatch, useSelector} from "react-redux";
 import {setPage} from "../../store/slices/gameSessionSlice.js";

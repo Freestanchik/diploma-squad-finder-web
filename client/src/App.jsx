@@ -10,7 +10,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import Login from "./pages/login/Login.jsx";
 import Navigation from "./components/navigation/Navigation.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
-import PageSelector from "./components/pageSelector/PageSelector.jsx";
 import UserGameSessions from "./pages/UserGameSessions/UserGameSessions.jsx";
 
 function App() {
