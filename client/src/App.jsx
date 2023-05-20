@@ -29,7 +29,6 @@ function App() {
                     <Route path="/page/:pageNumber" />
                 </Routes>
             </main>
-            <PageSelector totalPages={10}/>
             <Footer/>
             <ToastContainer/>
         </div>
