@@ -30,7 +30,7 @@ const SearchParamsForm = () => {
             initialValues={initialValues}
             onSubmit={handleSubmit}
         >
-            {({isSubmitting, setFieldValue}) => (
+            {({setFieldValue}) => (
                 <Form className="form">
                     <div className={"form-container"}>
                         <h3>Параметри пошуку</h3>
