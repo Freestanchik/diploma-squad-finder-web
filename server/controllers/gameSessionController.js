@@ -76,9 +76,8 @@ export const addParticipant = asyncHandler(async (req, res) => {
 
 export const deleteParticipant = asyncHandler(async (req, res) => {
     const {id} = req.params;
-    const {id: userId} = req.user;
 
-    const updatedGameSession = await gameSessionService.deleteParticipant(id, userId);
+    const updatedGameSession = await gameSessionService.deleteParticipant(id, req.user.id, req.body.id);
 
     res.status(200).json(updatedGameSession);
 });

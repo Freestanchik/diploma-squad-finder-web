@@ -84,10 +84,10 @@ const gameSessionService = {
         return await gameSessionRepository.findByIdWithPopulate(gameSessionId);
     },
 
-    deleteParticipant: async (gameSessionId, userId) => {
+    deleteParticipant: async (gameSessionId, authId, userId) => {
         const gameSession = await gameSessionRepository.findById(gameSessionId);
 
-        if (gameSession.owner.toString() === userId || gameSession.participants.includes(userId)) {
+        if ((gameSession.owner.toString() === authId || userId === authId ) && gameSession.participants.includes(userId)) {
             await gameSessionRepository.deleteParticipant(gameSessionId, userId);
         } else {
             throw new Error('User not found');
