@@ -1,7 +1,8 @@
 .form-container {
   max-width: 200px;
   border: 1px solid #ccc;
-  padding: 20px;
+  border-radius: 5px;
+  padding: 5px;
   margin-bottom: 5px;
   @media (max-width: 768px) {
     max-width: 100%;
@@ -19,7 +20,7 @@
 }
 
 .minSkillLevel_number {
-  width: 20px;
+  width: 30px;
   text-align: center;
 }
 
@@ -46,7 +47,7 @@ input[type='range'] {
 }
 
 input[type='range'] {
-  width: calc(100% - 70px); // Adjust width to accommodate the range value field
+  width: calc(100% - 70px);
   margin-right: 10px;
 }
 
