@@ -10,6 +10,7 @@ import {deleteGameSession, deleteParticipant, joinGameSession} from "../../store
 import {getUserPublicData} from "../../store/slices/userSlice.js";
 import React, {useState} from "react";
 import Modal from "../modal/Modal.jsx";
+import UserInfo from "../userInfo/UserInfo.jsx";
 
 
 const GameSessionItem = ({gameSession}) => {
@@ -63,13 +64,8 @@ const GameSessionItem = ({gameSession}) => {
                 </div>
                 <Modal active={userModalIsOpen} setActive={setUserModalIsOpen}>
                     {publicUser && (
-                        <div className="modal-form">
-                            <p>Інформація про користувача</p>
-                            <p>Логін: {publicUser.login}</p>
-                            <p>Імейл: {publicUser.email}</p>
-                        </div>
-                    )
-                    }
+                        <UserInfo user={publicUser}/>
+                    )}
                 </Modal>
                 <div className="game-session__action-icons">
                     {user && user._id === owner._id && (
