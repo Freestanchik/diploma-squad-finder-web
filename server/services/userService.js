@@ -10,7 +10,7 @@ const userService = {
     },
 
     getUserPublicData: async (userId) => {
-        const user = await userRepository.findById(userId, 'login email');
+        const user = await userRepository.findById(userId, 'login email discordNickname sex dateOfBirth favouriteGenre additionalInfo');
 
         if (!user) {
             throw new Error('User not found');

@@ -3,8 +3,10 @@ import {generateJWT} from "../helpers/index.js";
 import userRepository from "../repositories/userRepository.js";
 
 const authService = {
-    registerUser: async (login, email, password) => {
-        if (!login || !email || !password) {
+    registerUser: async (userData) => {
+        const {login, email, password, discordNickname, sex, dateOfBirth, favouriteGenre, additionalInfo} = userData;
+
+        if (!login || !email || !password || !discordNickname) {
             throw new Error('Add all required fields');
         }
 
@@ -16,7 +18,7 @@ const authService = {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await userRepository.createUser(login, email, hashedPassword);
+        const newUser = await userRepository.createUser(login, email, hashedPassword, discordNickname, sex, dateOfBirth, favouriteGenre, additionalInfo);
 
         if (!newUser) {
             throw new Error('Invalid user data');

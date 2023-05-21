@@ -5,8 +5,8 @@ const userRepository = {
         return UserModel.findOne({email});
     },
 
-    createUser: async (login, email, password) => {
-        return UserModel.create({login, email, password});
+    createUser: async (login, email, password, discordNickname, sex, dateOfBirth, favouriteGenre, additionalInfo) => {
+        return UserModel.create({login, email, password, discordNickname, sex, dateOfBirth, favouriteGenre, additionalInfo});
     },
 
     findById: async (id, publicFields) => {

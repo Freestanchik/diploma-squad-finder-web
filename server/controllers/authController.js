@@ -2,10 +2,8 @@ import asyncHandler from 'express-async-handler'
 import authService from "../services/authService.js";
 
 const registerUser = asyncHandler(async (req, res) => {
-    const {login, email, password} = req.body;
-
     try {
-        const token = await authService.registerUser(login, email, password);
+        const token = await authService.registerUser(req.body);
         res.status(201).json(token);
     } catch (error) {
         res.status(400).json({error: error.message});
