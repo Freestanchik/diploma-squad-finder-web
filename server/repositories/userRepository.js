@@ -5,13 +5,27 @@ const userRepository = {
         return UserModel.findOne({email});
     },
 
-    createUser: async (login, email, password, discordNickname, sex, dateOfBirth, favouriteGenre, additionalInfo) => {
-        return UserModel.create({login, email, password, discordNickname, sex, dateOfBirth, favouriteGenre, additionalInfo});
+    findByLogin: async (login) => {
+        return UserModel.findOne({login});
+    },
+
+    createUser: async (userData) => {
+        return UserModel.create({
+            ...userData
+        });
     },
 
     findById: async (id, publicFields) => {
         return UserModel.findById(id).select(publicFields).exec();
     },
+
+    editUser: async (userId, userData) => {
+        return UserModel.findByIdAndUpdate(
+            userId,
+            userData,
+            {new: true}
+        );
+    }
 };
 
 export default userRepository;
