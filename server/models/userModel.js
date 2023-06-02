@@ -22,15 +22,12 @@ const userSchema = mongoose.Schema(
         },
         sex: {
             type: String,
-            required: [true, "Please add your sex"],
         },
         dateOfBirth: {
             type: Date,
-            required: [true, "Please add your date of birth"],
         },
         favouriteGenre: {
             type: String,
-            required: [true, "Please add your favourite game genre"],
         },
         additionalInfo: {
             type: String,
