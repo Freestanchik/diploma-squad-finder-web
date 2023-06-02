@@ -11,9 +11,8 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-    const {email, password} = req.body;
-
     try {
+        const {email, password} = req.body;
         const token = await authService.loginUser(email, password);
         res.json(token);
     } catch (error) {

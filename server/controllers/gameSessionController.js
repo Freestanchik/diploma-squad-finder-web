@@ -3,83 +3,90 @@ import gameSessionService from "../services/gameSessionService.js";
 
 export const getAllSessions = asyncHandler(async (req, res) => {
     const {searchParams, currentPage} = req.body;
-    const {gameSessions, totalPages} = await gameSessionService.getAllSessions(searchParams, currentPage);
-
-    res.status(200).json({gameSessions, totalPages});
+    try {
+        const {gameSessions, totalPages} = await gameSessionService.getAllSessions(searchParams, currentPage);
+        res.status(200).json({gameSessions, totalPages});
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
 });
 
 export const getUserSessions = asyncHandler(async (req, res) => {
     const {id} = req.user;
-    const gameSessions = await gameSessionService.getUserSessions(id);
+    try {
+        const gameSessions = await gameSessionService.getUserSessions(id);
+        res.status(200).json(gameSessions);
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
 
-    res.status(200).json(gameSessions);
 });
 
 export const getUserParticipantSessions = asyncHandler(async (req, res) => {
-    const { id: userId } = req.user;
-    const gameSessions = await gameSessionService.getUserParticipantSessions(userId);
-
-    res.status(200).json(gameSessions);
+    const {id: userId} = req.user;
+    try {
+        const gameSessions = await gameSessionService.getUserParticipantSessions(userId);
+        res.status(200).json(gameSessions);
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
 });
 
 export const addGameSession = asyncHandler(async (req, res) => {
     const {id: ownerId} = req.user;
-    const {
-        gameName,
-        gamePlatforms,
-        skillLvl,
-        requiredPlayers,
-        sessionDate,
-        timeStart,
-        timeEnd,
-        additionalInfo,
-    } = req.body;
-
-    if (!gameName) {
-        res.status(400);
-        throw new Error('Please add gameName');
+    try {
+        const gameSession = await gameSessionService.addGameSession(ownerId, req.body);
+        res.status(200).json(gameSession);
+    } catch (error) {
+        res.status(400).json({error: error.message});
     }
-
-    const gameSessionData = {
-        gameName,
-        gamePlatforms,
-        skillLvl,
-        requiredPlayers,
-        sessionDate,
-        timeStart,
-        timeEnd,
-        additionalInfo,
-    };
-
-    const gameSession = await gameSessionService.addGameSession(ownerId, gameSessionData);
-
-    res.status(200).json(gameSession);
 });
 
 export const deleteGameSession = asyncHandler(async (req, res) => {
     const {id} = req.params;
+
+    const {id: ownerId} = req.user;
+    try {
+        const deletedGameSession = await gameSessionService.deleteGameSession(id, ownerId);
+        res.status(200).json(deletedGameSession);
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
+});
+
+export const editGameSession = asyncHandler(async (req, res) => {
+    const {id} = req.params;
     const {id: ownerId} = req.user;
 
-    const deletedGameSession = await gameSessionService.deleteGameSession(id, ownerId);
+    try {
+        const gameSession = await gameSessionService.editGameSession(id, ownerId, req.body.data);
+        res.status(200).json(gameSession);
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
 
-    res.status(200).json(deletedGameSession);
 });
+
 
 export const addParticipant = asyncHandler(async (req, res) => {
     const {id} = req.params;
     const {id: userId} = req.user;
-
-    const updatedGameSession = await gameSessionService.addParticipant(id, userId);
-
-    res.status(200).json(updatedGameSession);
+    try {
+        const updatedGameSession = await gameSessionService.addParticipant(id, userId);
+        res.status(200).json(updatedGameSession);
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
 });
 
 export const deleteParticipant = asyncHandler(async (req, res) => {
     const {id} = req.params;
-
-    const updatedGameSession = await gameSessionService.deleteParticipant(id, req.user.id, req.body.id);
-
-    res.status(200).json(updatedGameSession);
+    try {
+        const updatedGameSession = await gameSessionService.deleteParticipant(id, req.user.id, req.body.id);
+        res.status(200).json(updatedGameSession);
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
 });
 
 const gameSessionController = {
@@ -88,6 +95,7 @@ const gameSessionController = {
     getUserParticipantSessions,
     addGameSession,
     deleteGameSession,
+    editGameSession,
     addParticipant,
     deleteParticipant,
 };
