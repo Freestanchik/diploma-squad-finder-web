@@ -47,6 +47,14 @@ const gameSessionRepository = {
         return gameSessionModel.findByIdAndDelete(id);
     },
 
+    editGameSession: async (id, data) => {
+        return gameSessionModel.findByIdAndUpdate(
+            id,
+            data,
+            {new: true}
+        );
+    },
+
     addParticipant: async (gameSessionId, userId) => {
         return gameSessionModel.findByIdAndUpdate(gameSessionId, {$push: {participants: userId}});
     },
