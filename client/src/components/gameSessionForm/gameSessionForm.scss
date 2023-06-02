@@ -1,7 +1,7 @@
 .new-game-session-form {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 500px;
   margin: 0 auto;
   padding: 10px;
 
@@ -64,7 +64,7 @@
 
 
   @media (max-width: 500px) {
-    max-width: 100%;
+    max-width: 300px;
 
     input,
     select,

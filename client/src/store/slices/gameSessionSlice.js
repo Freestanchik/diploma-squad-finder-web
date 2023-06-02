@@ -64,6 +64,24 @@ export const createGameSession = createAsyncThunk(
     }
 )
 
+export const editGameSession = createAsyncThunk(
+    'gameSession/edit',
+    async ({gameSessionId, gameSessionData}, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.token
+            return await gameSessionService.editGameSession(gameSessionId, gameSessionData, token)
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
 export const deleteGameSession = createAsyncThunk(
     'gameSession/delete',
     async (id, thunkAPI) => {
@@ -81,6 +99,7 @@ export const deleteGameSession = createAsyncThunk(
         }
     }
 )
+
 
 export const joinGameSession = createAsyncThunk(
     'gameSession/join',
@@ -179,6 +198,17 @@ export const gameSessionSlice = createSlice({
                 )
             })
             .addCase(deleteGameSession.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            .addCase(editGameSession.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                const elemIndex = state.gameSessions.findIndex(item => item._id === action.payload._id)
+                state.gameSessions[elemIndex] = action.payload
+            })
+            .addCase(editGameSession.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload

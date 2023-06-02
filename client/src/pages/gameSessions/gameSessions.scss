@@ -15,6 +15,10 @@
       color: mediumorchid;
     }
   }
+  h2{
+    margin: 0;
+    text-align: center;
+  }
 }
 
 .btn-delete {
@@ -46,6 +50,10 @@
   }
 }
 
+.btn-plus{
+  margin-left: 5px;
+}
+
 .game-session-page {
   display: flex;
   flex-direction: column;
@@ -54,7 +62,7 @@
 .game-sessions__main{
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 300px max(500px) 300px;
+  grid-template-columns: 1fr minmax(300px, 800px)  1fr;
 
   @media (max-width: 768px) {
     display: flex;

@@ -11,18 +11,25 @@ import {getUserPublicData} from "../../store/slices/userSlice.js";
 import React, {useState} from "react";
 import Modal from "../modal/Modal.jsx";
 import UserInfo from "../userInfo/UserInfo.jsx";
+import {faPen} from "@fortawesome/free-solid-svg-icons";
+import GameSessionForm from "../gameSessionForm/GameSessionForm.jsx";
 
 
 const GameSessionItem = ({gameSession}) => {
     const dispatch = useDispatch()
 
     const [userModalIsOpen, setUserModalIsOpen] = useState(false);
+    const [editModalIsOpen, seteditModalIsOpen] = useState(false);
 
     const {user, publicUser} = useSelector((state) => state.user)
 
 
     function openUserModal() {
         setUserModalIsOpen(true);
+    }
+
+    function openEditModal() {
+        seteditModalIsOpen(true);
     }
 
     function hasUserWithId(participants, chosenId) {
@@ -49,6 +56,10 @@ const GameSessionItem = ({gameSession}) => {
 
     return (
         <div className="game-session">
+            <Modal active={editModalIsOpen} setActive={seteditModalIsOpen}>
+                <h2>Редагування сесії</h2>
+                <GameSessionForm gameSession={gameSession}/>
+            </Modal>
             <div className="game-session__main">
                 <div className="game-session__required-data">
                     <h2 className="game-name">Гра: {gameName}</h2>
@@ -69,10 +80,17 @@ const GameSessionItem = ({gameSession}) => {
                 </Modal>
                 <div className="game-session__action-icons">
                     {user && user._id === owner._id && (
-                        <FontAwesomeIcon icon={faWindowClose} className="btn-delete"
-                                         onClick={() => {
-                                             dispatch(deleteGameSession(gameSession._id))
-                                         }}/>)
+                        <>
+                            <FontAwesomeIcon icon={faPen} className="btn-edit"
+                                             onClick={() => {
+                                                 openEditModal()
+                                             }}/>
+                            <FontAwesomeIcon icon={faWindowClose} className="btn-delete"
+                                             onClick={() => {
+                                                 dispatch(deleteGameSession(gameSession._id))
+                                             }}/>
+                        </>
+                    )
                     }
                     {user && user._id !== owner._id && !hasUserWithId(participants, user._id) && (
                         <button className="btn-join" onClick={() => dispatch(joinGameSession(gameSession._id))}>
@@ -94,30 +112,6 @@ const GameSessionItem = ({gameSession}) => {
             </div>
 
             <div className="game-session__info">
-                {gamePlatforms.length > 0 && (
-                    <p className="game-platforms">
-                        Platforms: {gamePlatforms.join(', ')}
-                    </p>
-                )}
-                {skillLvl && (
-                    <p className="skill-lvl">Рівень гри: {skillLvl}</p>
-                )}
-                {requiredPlayers && (
-                    <p className="required-players">Необхідна кількість гравців: {requiredPlayers}</p>
-                )}
-                {sessionDate && (
-                    <p className="session-date">
-                        Дата проведення: {sessionDate}
-                    </p>
-                )}
-                {timeStart && timeEnd && (
-                    <p className="session-time">
-                        Час: {timeStart} - {timeEnd}
-                    </p>
-                )}
-                {additionalInfo && (
-                    <p className="additional-info">Додаткова інформація: {additionalInfo}</p>
-                )}
                 {participants.length > 0 && (
                     <div className="user-participants">
                         <p>Учасники: </p>
@@ -140,6 +134,41 @@ const GameSessionItem = ({gameSession}) => {
                         ))}
                     </div>
                 )}
+                {gamePlatforms.length > 0 && (
+                    <p className="game-platforms">
+                        Доступні платформи: <span>{gamePlatforms.join(', ')}</span>
+                    </p>
+                )}
+                <div className={"game-session__info_columns"}>
+                    {skillLvl && (
+                        <p className="skill-lvl">Мінімальний рівень гри:
+                            <span>{skillLvl}</span>
+                        </p>
+                    )}
+                    {requiredPlayers && (
+                        <p className="required-players">
+                            Необхідна кількість гравців:
+                            <span>{requiredPlayers}</span>
+                        </p>
+                    )}
+                </div>
+                {additionalInfo && (
+                    <p className="additional-info">Додаткова інформація:
+                        <span>{additionalInfo}</span>
+                    </p>
+                )}
+                <div className={"game-session__info_columns"}>
+                    {sessionDate && (
+                        <p className="session-date">
+                            Дата проведення: <span>{sessionDate.substring(0, 10)}</span>
+                        </p>
+                    )}
+                    {timeStart && timeEnd && (
+                        <p className="session-time">
+                            Час проведення: <span>{timeStart} - {timeEnd}</span>
+                        </p>
+                    )}
+                </div>
             </div>
         </div>
     );

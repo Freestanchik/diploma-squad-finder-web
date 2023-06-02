@@ -42,8 +42,38 @@ const gameSessionService = {
         return gameSessionRepository.findByParticipant(userId);
     },
 
-    addGameSession: async (ownerId, gameSessionData) => {
+    addGameSession: async (ownerId, data) => {
+        const {
+            gameName,
+            gamePlatforms,
+            skillLvl,
+            requiredPlayers,
+            sessionDate,
+            timeStart,
+            timeEnd,
+            additionalInfo,
+        } = data;
+
+        if (!gameName) {
+            throw new Error('Please add gameName');
+        }
+
+        const gameSessionData = {
+            gameName,
+            gamePlatforms,
+            skillLvl,
+            requiredPlayers,
+            sessionDate,
+            timeStart,
+            timeEnd,
+            additionalInfo,
+        };
+
         const gameSession = await gameSessionRepository.createGameSession(ownerId, gameSessionData);
+
+        if (!gameSession) {
+            throw new Error('Game session wrong data');
+        }
 
         return await gameSessionRepository.findByIdWithPopulate(gameSession._id);
     },
@@ -62,6 +92,40 @@ const gameSessionService = {
         await gameSessionRepository.deleteGameSession(gameSessionId);
 
         return {id: gameSessionId};
+    },
+
+    editGameSession: async (gameSessionId, ownerId, data) => {
+        const gameSession = await gameSessionRepository.findById(gameSessionId);
+
+        if (gameSession.owner.toString() !== ownerId) {
+            throw new Error('You are not owner');
+        }
+
+        const {
+            gameName,
+            gamePlatforms,
+            skillLvl,
+            requiredPlayers,
+            sessionDate,
+            timeStart,
+            timeEnd,
+            additionalInfo,
+        } = data;
+
+        const gameSessionData = {
+            gameName,
+            gamePlatforms,
+            skillLvl,
+            requiredPlayers,
+            sessionDate,
+            timeStart,
+            timeEnd,
+            additionalInfo,
+        };
+
+        await gameSessionRepository.editGameSession(gameSessionId, gameSessionData)
+
+        return await gameSessionRepository.findByIdWithPopulate(gameSessionId);
     },
 
     addParticipant: async (gameSessionId, userId) => {
@@ -87,7 +151,7 @@ const gameSessionService = {
     deleteParticipant: async (gameSessionId, authId, userId) => {
         const gameSession = await gameSessionRepository.findById(gameSessionId);
 
-        if ((gameSession.owner.toString() === authId || userId === authId ) && gameSession.participants.includes(userId)) {
+        if ((gameSession.owner.toString() === authId || userId === authId) && gameSession.participants.includes(userId)) {
             await gameSessionRepository.deleteParticipant(gameSessionId, userId);
         } else {
             throw new Error('User not found');

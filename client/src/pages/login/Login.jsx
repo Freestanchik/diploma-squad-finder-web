@@ -65,12 +65,11 @@ const Login = () => {
             validate={validateForm}
             onSubmit={handleSubmit}
         >
-            <Form>
-                <div className="login-form">
+            <Form  className="login-form">
                     <h2>Вхід</h2>
 
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email">Електронна пошта</label>
                         <Field
                             type="email"
                             id="email"
@@ -81,7 +80,7 @@ const Login = () => {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Пароль</label>
                         <Field
                             type="password"
                             id="password"
@@ -94,9 +93,7 @@ const Login = () => {
                     <button type="submit" className="btn btn-primary">
                         Увійти
                     </button>
-
-                    <Link to={"/register"}><p>Зареєструватися</p></Link>
-                </div>
+                    <p>Немає аккаунту? <Link to={"/register"}><span>Зареєструватися</span></Link></p>
             </Form>
         </Formik>
     );

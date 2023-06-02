@@ -3,7 +3,7 @@ import {Formik, Form, Field, ErrorMessage} from 'formik';
 import './registration.scss';
 import {useSelector, useDispatch} from 'react-redux';
 import {register, reset} from '../../store/slices/authSlice.js';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import Loading from '../../components/loading/Loading.jsx';
 
@@ -45,8 +45,7 @@ const Registration = () => {
     };
 
     const handleSubmit = (values) => {
-        const { confirmPassword, ...data } = values;
-        console.log(data)
+        const {confirmPassword, ...data} = values;
         dispatch(register(data));
     };
 
@@ -155,6 +154,7 @@ const Registration = () => {
                 <button type="submit" className="btn btn-primary">
                     Зареєструватися
                 </button>
+                <p>Вже є аккаунт? <Link to={"/login"}><span>Увійти</span></Link></p>
             </Form>
         </Formik>
     );

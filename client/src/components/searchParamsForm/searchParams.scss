@@ -1,5 +1,5 @@
 .form-container {
-  max-width: 200px;
+  max-width: 100%;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 5px;
@@ -10,6 +10,10 @@
   }
 }
 
+input{
+  width: 100%;
+}
+
 .minSkillLevel {
   display: flex;
   flex-direction: column;
@@ -17,11 +21,6 @@
 
 .minSkillLevel__main {
   display: flex;
-}
-
-.minSkillLevel_number {
-  width: 30px;
-  text-align: center;
 }
 
 .form-field {
@@ -47,13 +46,22 @@ input[type='range'] {
 }
 
 input[type='range'] {
-  width: calc(100% - 70px);
   margin-right: 10px;
+}
+
+.minSkillLevel_number {
+  width: 35px;
+  text-align: center;
+}
+
+.game-platforms-checkboxes{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
 }
 
 .range-value {
   display: inline-block;
-  width: 60px;
   padding: 0.5rem;
   border-radius: 4px;
   border: 1px solid #ccc;

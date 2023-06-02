@@ -1,7 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import React, {useEffect} from "react";
-//import {getUserGameSessions, resetGameSessions} from "../../store/slices/gameSessionSlice.js";
 import GameSessionList from "../../components/gameSessionList/GameSessionList.jsx";
 import Loading from "../../components/loading/Loading.jsx";
 import {getUserGameSessions} from "../../store/slices/gameSessionSlice.js";

@@ -7,21 +7,37 @@ const authService = {
         const {login, email, password, discordNickname, sex, dateOfBirth, favouriteGenre, additionalInfo} = userData;
 
         if (!login || !email || !password || !discordNickname) {
-            throw new Error('Add all required fields');
+            throw new Error('Додайте всі необхідні поля');
         }
 
-        const existingUser = await userRepository.findByEmail(email);
+        const existingEmail = await userRepository.findByEmail(email);
 
-        if (existingUser) {
-            throw new Error('User already exists');
+        if (existingEmail) {
+            throw new Error('Користувач з такою поштою вже існує');
+        }
+
+        const existingLogin = await userRepository.findByLogin(login)
+
+        if (existingLogin) {
+            throw new Error('Користувач з таким логіном вже існує');
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await userRepository.createUser(login, email, hashedPassword, discordNickname, sex, dateOfBirth, favouriteGenre, additionalInfo);
+        const newUserData = {
+            email,
+            login,
+            password: hashedPassword,
+            discordNickname,
+            sex, dateOfBirth,
+            favouriteGenre,
+            additionalInfo
+        }
+
+        const newUser = await userRepository.createUser(newUserData);
 
         if (!newUser) {
-            throw new Error('Invalid user data');
+            throw new Error('Неправильні дані користувача');
         }
 
         return generateJWT(newUser._id);
@@ -29,13 +45,13 @@ const authService = {
 
     loginUser: async (email, password) => {
         if (!email || !password) {
-            throw new Error('Add all required fields');
+            throw new Error('Додайте всі необхідні поля');
         }
 
         const user = await userRepository.findByEmail(email);
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            throw new Error('Invalid user data');
+            throw new Error('Користувача з такими даними не знайдено');
         }
 
         return generateJWT(user._id);

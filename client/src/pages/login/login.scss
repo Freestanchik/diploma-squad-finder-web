@@ -1,5 +1,6 @@
 .login-form {
-  max-width: 400px;
+  width: 100%;
+  max-width: 500px;
 
   h2 {
     text-align: center;
@@ -44,5 +45,10 @@
     &:hover {
       background-color: #6b3fa0;
     }
+  }
+
+  p {
+    text-align: end;
+    font-size: 1.25rem;
   }
 }
