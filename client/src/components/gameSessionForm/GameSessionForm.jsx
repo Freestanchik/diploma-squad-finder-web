@@ -1,22 +1,22 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import "./gameSessionForm.scss"
 import {useDispatch} from "react-redux";
-import {createGameSession} from "../../store/slices/gameSessionSlice.js";
+import {createGameSession, editGameSession} from "../../store/slices/gameSessionSlice.js";
 import {toast} from "react-toastify";
 import GamePlatformsField from "../gamePlatformsField/GamePlatformsField.jsx";
 
-const GameSessionForm = () => {
+const GameSessionForm = ({gameSession}) => {
     const dispatch = useDispatch();
 
-    const initialValues = {
-        gameName: '',
-        gamePlatforms: [],
-        skillLvl: '',
-        requiredPlayers: '',
-        sessionDate: '',
-        timeStart: '',
-        timeEnd: '',
-        additionalInfo: ''
+    let initialValues = {
+        gameName: gameSession && gameSession.gameName || '',
+        gamePlatforms: gameSession && gameSession.gamePlatforms || [],
+        skillLvl: gameSession && gameSession.skillLvl || '',
+        requiredPlayers: gameSession && gameSession.requiredPlayers || '',
+        sessionDate: gameSession && gameSession.sessionDate &&  gameSession.sessionDate.substring(0, 10) || '',
+        timeStart: gameSession && gameSession.timeStart || '',
+        timeEnd: gameSession && gameSession.timeEnd || '',
+        additionalInfo: gameSession && gameSession.additionalInfo || ''
     };
 
     const validate = (values) => {
@@ -30,16 +30,22 @@ const GameSessionForm = () => {
     };
 
     const handleSubmit = (values, {resetForm}) => {
-        dispatch(createGameSession(values));
-        toast("ігрову сесію успішно додано!")
-        resetForm()
+        if(!gameSession){
+            dispatch(createGameSession(values));
+            toast("ігрову сесію успішно додано!")
+            resetForm()
+        }else {
+            dispatch(editGameSession({gameSessionId: gameSession._id, gameSessionData: values}))
+            toast("ігрову сесію успішно змінено!")
+        }
+
     };
 
     return (
         <Formik initialValues={initialValues} validate={validate} onSubmit={handleSubmit}>
             <Form className="new-game-session-form">
                 <label>
-                    Game Name:
+                    Назва гри:
                     <Field type="text" name="gameName"/>
                 </label>
                 <ErrorMessage name="gameName" component="div" className="error"/>
@@ -48,42 +54,42 @@ const GameSessionForm = () => {
 
                 <ErrorMessage name="gamePlatforms" component="div" className="error"/>
                 <label>
-                    Skill Level:
+                    Рівень гри:
                     <Field type="number" name="skillLvl" min="1" max="10"/>
                 </label>
                 <ErrorMessage name="skillLvl" component="div" className="error"/>
 
                 <label>
-                    Required Players:
+                    Необхідна кількість гравців:
                     <Field type="number" name="requiredPlayers" min="1"/>
                 </label>
                 <ErrorMessage name="requiredPlayers" component="div" className="error"/>
 
                 <label>
-                    Session Date:
+                    Дата проведенння:
                     <Field type="date" name="sessionDate"/>
                 </label>
                 <ErrorMessage name="sessionDate" component="div" className="error"/>
 
                 <label>
-                    Time Start:
+                    Час початку:
                     <Field type="time" name="timeStart"/>
                 </label>
                 <ErrorMessage name="timeStart" component="div" className="error"/>
 
                 <label>
-                    Time End:
+                    Час кінцю:
                     <Field type="time" name="timeEnd"/>
                 </label>
                 <ErrorMessage name="timeEnd" component="div" className="error"/>
 
                 <label>
-                    Additional Info:
+                    Додаткова інформація:
                     <Field as="textarea" name="additionalInfo"/>
                 </label>
                 <ErrorMessage name="additionalInfo" component="div" className="error"/>
 
-                <button type="submit">Create Game Session</button>
+                <button type="submit">{gameSession ? "Редагувати сесію" : "Створити сесію"}</button>
             </Form>
         </Formik>
     );

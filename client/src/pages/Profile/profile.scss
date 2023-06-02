@@ -1,11 +1,23 @@
 .profile {
   margin: 5px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
   max-width: 600px;
   width: 100%;
+  span{
+    font-size: 25px;
+  }
+
+  .btn-edit{
+    align-self: end;
+  }
+
+  .modalUser{
+    padding: 20px;
+  }
 
   &__container {
     background-color: #f5f5f5;
@@ -22,13 +34,11 @@
 
       .profile__label {
         font-weight: bold;
-        font-size: 16px;
         color: #333;
       }
 
       .profile__value {
         margin-left: 10px;
-        font-size: 14px;
         color: #666;
       }
     }

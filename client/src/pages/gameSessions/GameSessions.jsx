@@ -6,7 +6,7 @@ import Modal from "../../components/modal/Modal.jsx";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {getAllGameSessions} from "../../store/slices/gameSessionSlice.js";
-import {faSquarePlus, faWindowClose} from "@fortawesome/free-regular-svg-icons";
+import {faWindowClose} from "@fortawesome/free-regular-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import SearchParamsForm from "../../components/searchParamsForm/SearchParamsForm.jsx";
 import PageSelector from "../../components/pageSelector/PageSelector.jsx";
@@ -19,7 +19,15 @@ const GameSessions = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const {gameSessions, currentPage, totalPages, searchFilters, isSuccess, isError, message} = useSelector((state) => state.gameSession)
+    const {
+        gameSessions,
+        currentPage,
+        totalPages,
+        searchFilters,
+        isSuccess,
+        isError,
+        message
+    } = useSelector((state) => state.gameSession)
 
     useEffect(() => {
         dispatch(getAllGameSessions({searchParams: searchFilters, currentPage: currentPage}))
@@ -40,7 +48,6 @@ const GameSessions = () => {
         <div className={"game-session-page"}>
             <button className="btn-open-form" onClick={openFormModal}>
                 Створити сесію
-                <FontAwesomeIcon className={"btn-plus"} icon={faSquarePlus}></FontAwesomeIcon>
             </button>
 
             <Modal active={formModalIsOpen} setActive={setFormIsOpen}>
@@ -48,8 +55,8 @@ const GameSessions = () => {
                     <FontAwesomeIcon icon={faWindowClose} className="btn-close-modal"
                                      onClick={closeFormModal}>close
                     </FontAwesomeIcon>
-
-                    <GameSessionForm/>
+                    <h2>Створення сесії</h2>
+                    <GameSessionForm gameSession={null}/>
                 </div>
             </Modal>
             <div className={"game-sessions__main"}>

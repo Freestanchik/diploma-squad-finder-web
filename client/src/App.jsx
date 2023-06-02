@@ -3,7 +3,7 @@ import Footer from "./components/footer/Footer.jsx";
 import Header from "./components/header/Header.jsx";
 import {Routes, Route} from "react-router-dom";
 import Registration from "./pages/registration/Registration.jsx";
-import GameSessions from "./pages/gameSessions/gameSessions.jsx";
+import GameSessions from "./pages/gameSessions/GameSessions.jsx";
 import React from "react";
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -25,7 +25,6 @@ function App() {
                     <Route path={"/profile"} element={<Profile/>}></Route>
                     <Route path={"/register"} element={<Registration/>}></Route>
                     <Route path={"/login"} element={<Login/>}> </Route>
-                    <Route path="/page/:pageNumber" />
                 </Routes>
             </main>
             <Footer/>

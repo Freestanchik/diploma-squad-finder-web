@@ -71,12 +71,25 @@ const deleteParticipant = async (gameSessionId, userId, token) => {
     return response.data
 }
 
+const editGameSession = async (gameSessionId, gameSessionData, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    const response = await axios.put(API_URL + '/UserGameSessions/' + gameSessionId, {data: gameSessionData}, config)
+
+    return response.data
+}
+
 
 const gameSessionService = {
     getAllGameSessions,
     getUserGameSessions,
     createGameSession,
     deleteGameSession,
+    editGameSession,
     joinGameSession,
     deleteParticipant,
 }

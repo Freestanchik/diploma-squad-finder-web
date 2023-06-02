@@ -16,6 +16,7 @@
   .form-passwords, .form-add-vals {
     width: 100%;
     display: flex;
+    margin-bottom: 1rem;
 
     .form-group {
       margin: 5px;
@@ -82,16 +83,21 @@
   .btn-primary {
     width: 100%;
     padding: 0.75rem;
-    font-size: 1rem;
     color: #fff;
     background-color: #7d4cdb;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
+    font-size: 1.25rem;
 
     &:hover {
       background-color: #6b3fa0;
     }
+  }
+
+  p {
+    font-size: 1.25rem;
+    align-self: end;
   }
 }

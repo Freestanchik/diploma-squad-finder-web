@@ -22,8 +22,20 @@ const getUserPublicData = async (id) => {
     return response.data
 }
 
+const editUser = async (token, userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    const response = await axios.put(API_URL + 'profile', userData, config)
+
+    return response.data
+}
+
 const userService = {
     getUser,
     getUserPublicData,
+    editUser,
 }
 export default userService

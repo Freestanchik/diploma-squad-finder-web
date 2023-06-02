@@ -12,10 +12,15 @@
   width: 100%;
   display: flex;
   justify-content: space-evenly;
-
 }
 
 .checkbox-label {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  input{
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+  }
 }

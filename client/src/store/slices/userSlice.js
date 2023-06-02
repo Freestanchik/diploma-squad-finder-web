@@ -46,6 +46,25 @@ export const getUserPublicData = createAsyncThunk(
     }
 )
 
+export const editUser = createAsyncThunk(
+    'user/editUser',
+    async (userData, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.token
+            return await userService.editUser(token, userData)
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
+
 export const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -54,10 +73,18 @@ export const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getUser.pending || getUserPublicData.pending, (state) => {
+            .addCase(getUser.pending, (state) => {
                 state.isLoading = true
             })
             .addCase(getUser.rejected || getUserPublicData.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            .addCase(editUser.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(editUser.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload
@@ -71,6 +98,11 @@ export const userSlice = createSlice({
                 state.isLoading = false
                 state.isSuccess = true
                 state.publicUser = action.payload
+            })
+            .addCase(editUser.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.user = action.payload
             })
     },
 })
